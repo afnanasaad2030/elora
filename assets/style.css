@@ -176,7 +176,7 @@ code {
 .chip .n { font-size: .74em; opacity: .55; font-variant-numeric: tabular-nums; }
 .chip[aria-pressed="true"] {
   background: var(--rose); border-color: var(--rose);
-  color: #fff; font-weight: 600;
+  color: var(--on-accent, #fff); font-weight: 600;
 }
 .chip[aria-pressed="true"] .n { opacity: .75; }
 
@@ -243,7 +243,7 @@ main {
 .badge-new {
   position: absolute; inset-inline-start: 10px; top: 10px;
   padding: 4px 11px; border-radius: 999px;
-  background: var(--rose); color: #fff;
+  background: var(--rose); color: var(--on-accent, #fff);
   font-size: .67rem; font-weight: 600; letter-spacing: .03em;
   box-shadow: var(--shadow-sm);
 }

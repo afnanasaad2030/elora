@@ -46,6 +46,24 @@
     return Number.isFinite(t) && (Date.now() - t) < NEW_DAYS * 864e5;
   }
 
+  /**
+   * يطبّق لون الهوية المختار، ويختار لون النص فوقه تلقائيًا.
+   * بدون هذا، أي لون فاتح يختاره صاحب المتجر يجعل النص الأبيض غير مقروء.
+   */
+  function applyAccent(hex) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex || '')) return;
+    const ch = (i) => {
+      const v = parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16) / 255;
+      return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    };
+    const L = 0.2126 * ch(0) + 0.7152 * ch(1) + 0.0722 * ch(2);
+    const s = document.documentElement.style;
+    s.setProperty('--rose', hex);
+    s.setProperty('--accent', hex);
+    // 0.23 هو حد التعادل بين تباين الأبيض وتباين الداكن على الخلفية نفسها
+    s.setProperty('--on-accent', L > 0.23 ? '#2c2522' : '#ffffff');
+  }
+
   function toast(msg) {
     const t = $('#toast');
     t.textContent = msg;
@@ -62,7 +80,7 @@
     $('#tagline').textContent = CFG.tagline || '';
     $('#footerBrand').textContent = `© ${new Date().getFullYear()} ${name}`;
 
-    if (CFG.accent) document.documentElement.style.setProperty('--accent', CFG.accent);
+    applyAccent(CFG.accent);
 
     if (CFG.logo) {
       const slot = $('#logoSlot');

@@ -28,7 +28,7 @@ select { background-image: none; }
 .btn-lg {
   display: block; width: 100%; margin-top: 18px;
   padding: 15px; border: none; border-radius: 13px;
-  background: var(--accent); color: #fff;
+  background: var(--accent); color: var(--on-accent, #fff);
   font: inherit; font-size: 1.03rem; font-weight: 700;
   cursor: pointer;
 }
@@ -117,7 +117,7 @@ html[data-theme="dark"] .banner { background: #2a2415; border-color: #4a3f22; co
 .acard.pending::after {
   content: "قيد النشر"; position: absolute; inset-inline-end: 6px; top: 6px;
   padding: 2px 7px; border-radius: 999px;
-  background: var(--accent); color: #fff; font-size: .65rem; font-weight: 700;
+  background: var(--accent); color: var(--on-accent, #fff); font-size: .65rem; font-weight: 700;
 }
 
 .afoot {

@@ -46,6 +46,20 @@
     toast._t = setTimeout(() => { t.hidden = true; }, 2600);
   }
 
+  /** نفس منطق app.js: يختار لون النص فوق لون الهوية حتى يبقى مقروءًا. */
+  function applyAccent(hex) {
+    if (!/^#[0-9a-f]{6}$/i.test(hex || '')) return;
+    const ch = (i) => {
+      const v = parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16) / 255;
+      return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    };
+    const L = 0.2126 * ch(0) + 0.7152 * ch(1) + 0.0722 * ch(2);
+    const s = document.documentElement.style;
+    s.setProperty('--rose', hex);
+    s.setProperty('--accent', hex);
+    s.setProperty('--on-accent', L > 0.23 ? '#2c2522' : '#ffffff');
+  }
+
   function busy(msg) {
     $('#busyMsg').textContent = msg;
     $('#busy').hidden = false;
@@ -483,6 +497,7 @@
     } catch {
       SITE = {};                // الملف مفقود — ستُنشئه أول عملية حفظ
     }
+    applyAccent(SITE.accent);
   }
 
   /** يحوّل ما يكتبه المستخدم إلى رقم دولي صالح لرابط wa.me. */
@@ -553,6 +568,7 @@
       const blob = new Blob([JSON.stringify(next, null, 2) + '\n'], { type: 'application/json' });
       await commit([{ path: CFG_PATH, blob }], 'تحديث إعدادات المتجر');
       SITE = next;
+      applyAccent(next.accent);         // معاينة فورية للون الجديد
       await loadSite();                 // لالتقاط بصمة الملف الجديدة
       showBanner();
       toast('تم حفظ الإعدادات');
