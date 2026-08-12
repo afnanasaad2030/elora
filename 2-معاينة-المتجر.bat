@@ -1,23 +1,9 @@
 @echo off
+REM ASCII ONLY - see the note in 3-نشر-على-الإنترنت.bat
 chcp 65001 >nul
 cd /d "%~dp0"
-echo ==================================================
-echo   ELORA - معاينة المتجر على هذا الجهاز
-echo ==================================================
+set PYTHONIOENCODING=utf-8
+set PYTHONUTF8=1
+python tools\preview.py
 echo.
-python tools\build.py
-if errorlevel 1 (
-  echo.
-  echo [!] حدث خطأ. تاكد ان Python مثبّت على الجهاز.
-  echo.
-  pause
-  exit /b 1
-)
-echo.
-echo --------------------------------------------------
-echo   المتصفح سيفتح الان على:  http://localhost:8000
-echo   لايقاف المعاينة: اغلق هذه النافذة
-echo --------------------------------------------------
-echo.
-start "" http://localhost:8000
-python -m http.server 8000
+pause
