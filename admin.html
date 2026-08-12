@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fbf8f6">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة تحكم ELORA</title>
+<link rel="icon" href="assets/icon.png?v=20260812133833">
+<link rel="apple-touch-icon" href="assets/icon.png?v=20260812133833">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/style.css?v=20260812133833">
+<link rel="stylesheet" href="assets/admin.css?v=20260812133833">
+</head>
+<body class="admin">
+
+<!-- ══════════ شاشة الإعداد (تظهر مرة واحدة فقط) ══════════ -->
+<section id="setup" class="screen setup" hidden>
+  <img src="assets/logo.png?v=20260812133833" alt="ELORA" class="setup-logo">
+  <h1>ربط لوحة التحكم</h1>
+  <p class="muted">تُملأ مرة واحدة فقط على هذا الجهاز.</p>
+
+  <label>اسم حسابك على GitHub
+    <input id="fOwner" type="text" inputmode="latin" placeholder="مثال: elora-shop" autocomplete="off" dir="ltr">
+  </label>
+
+  <label>اسم المستودع
+    <input id="fRepo" type="text" inputmode="latin" placeholder="elora" autocomplete="off" dir="ltr">
+  </label>
+
+  <label>مفتاح الوصول (Token)
+    <input id="fToken" type="password" placeholder="github_pat_..." autocomplete="off" dir="ltr">
+  </label>
+
+  <p class="hint">
+    المفتاح يُحفظ على هذا الجهاز فقط ولا يُرسل لأي جهة أخرى.
+    طريقة إنشائه مشروحة في دليل ELORA.
+  </p>
+
+  <button id="btnConnect" class="btn-lg">اتصال</button>
+  <p id="setupErr" class="err" hidden></p>
+</section>
+
+<!-- ══════════ اللوحة ══════════ -->
+<section id="app" class="screen" hidden>
+
+  <header class="ah">
+    <img src="assets/logo.png?v=20260812133833" alt="ELORA" class="ah-logo">
+    <div class="ah-t">
+      <strong>لوحة التحكم</strong>
+      <span id="ahCount" class="muted"></span>
+    </div>
+    <button id="btnSettings" class="ah-icon" title="الإعدادات" aria-label="الإعدادات">⚙</button>
+    <a id="ahView" class="ah-link" target="_blank" rel="noopener">عرض المتجر</a>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <div class="add-row">
+    <button id="btnAdd" class="btn-lg">＋ إضافة صور أو فيديو</button>
+    <input id="filePick" type="file" accept="image/*,video/*" multiple hidden>
+  </div>
+
+  <nav id="aFilters" class="filters"></nav>
+
+  <div id="aGrid" class="agrid"></div>
+  <p id="aEmpty" class="muted center pad" hidden>لا توجد منتجات بعد. اضغط «إضافة».</p>
+
+  <footer class="afoot">
+    <button id="btnRefresh" class="btn-ghost-sm">تحديث القائمة</button>
+    <button id="btnLogout" class="btn-ghost-sm danger">فصل هذا الجهاز</button>
+  </footer>
+</section>
+
+<!-- ══════════ مراجعة الملفات قبل النشر ══════════ -->
+<div id="review" class="sheet" hidden>
+  <div class="sheet-box">
+    <div class="sheet-head">
+      <strong>مراجعة قبل النشر</strong>
+      <button id="revClose" class="x" aria-label="إغلاق">✕</button>
+    </div>
+    <div id="revList" class="rev-list"></div>
+    <div class="sheet-foot">
+      <button id="revPublish" class="btn-lg">نشر</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ خيارات منتج ══════════ -->
+<div id="itemSheet" class="sheet" hidden>
+  <div class="sheet-box">
+    <div class="sheet-head">
+      <strong id="isName"></strong>
+      <button id="isClose" class="x" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-body">
+      <img id="isThumb" class="is-thumb" alt="">
+      <label>اسم المنتج
+        <input id="isTitle" type="text">
+      </label>
+      <label>التصنيف
+        <select id="isCat"></select>
+      </label>
+    </div>
+    <div class="sheet-foot col">
+      <button id="isSave" class="btn-lg">حفظ التعديل</button>
+      <button id="isDelete" class="btn-lg danger-fill">حذف المنتج</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ إعدادات المتجر ══════════ -->
+<div id="settings" class="sheet" hidden>
+  <div class="sheet-box">
+    <div class="sheet-head">
+      <strong>إعدادات المتجر</strong>
+      <button id="setClose" class="x" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-body">
+      <label>اسم المتجر
+        <input id="sBrand" type="text" placeholder="ELORA">
+      </label>
+
+      <label>الوصف تحت الاسم
+        <input id="sTagline" type="text" placeholder="إكسسوارات مصنوعة يدويًا بحب">
+      </label>
+
+      <label>رقم الواتساب
+        <input id="sWa" type="tel" inputmode="tel" dir="ltr" placeholder="967771234567">
+      </label>
+      <p class="hint nomargin">
+        برمز الدولة، وبدون <code dir="ltr">+</code> وبدون الصفر الذي قبل الرقم.<br>
+        مثال: <code dir="ltr">967771234567</code>
+      </p>
+      <p id="sWaPreview" class="wa-preview" hidden></p>
+
+      <label>نص الرسالة التي تصلك من الزبون
+        <input id="sWaMsg" type="text" placeholder="السلام عليكم، أرغب بطلب هذا المنتج:">
+      </label>
+
+      <label>حساب انستقرام <span class="opt">(اختياري)</span>
+        <input id="sIg" type="text" dir="ltr" placeholder="elora.store">
+      </label>
+
+      <label>لون الهوية
+        <input id="sAccent" type="color">
+      </label>
+    </div>
+    <div class="sheet-foot">
+      <button id="setSave" class="btn-lg">حفظ الإعدادات</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ شاشة الانتظار ══════════ -->
+<div id="busy" class="busy" hidden>
+  <div class="spinner"></div>
+  <p id="busyMsg">جارٍ العمل…</p>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="assets/admin.js?v=20260812133833"></script>
+</body>
+</html>

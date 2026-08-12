@@ -1,0 +1,219 @@
+/* لوحة تحكم ELORA — أهداف لمس كبيرة، مصمَّمة للجوال أولًا */
+
+body.admin { background: var(--bg); padding-bottom: 40px; }
+
+.screen { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+.muted  { color: var(--text-dim); }
+.center { text-align: center; }
+.pad    { padding: 40px 12px; }
+.err    { color: #b3261e; font-size: .9rem; margin-top: 10px; }
+.hint   { font-size: .82rem; color: var(--text-dim); line-height: 1.8; }
+
+/* ---------- الحقول ---------- */
+label {
+  display: block; margin: 16px 0 0;
+  font-size: .9rem; font-weight: 600; color: var(--text);
+}
+input[type=text], input[type=password], select {
+  width: 100%; margin-top: 7px; padding: 13px 14px;
+  font: inherit; font-size: 1rem; font-weight: 400;
+  color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 11px;
+  -webkit-appearance: none; appearance: none;
+}
+input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+select { background-image: none; }
+
+/* ---------- الأزرار ---------- */
+.btn-lg {
+  display: block; width: 100%; margin-top: 18px;
+  padding: 15px; border: none; border-radius: 13px;
+  background: var(--accent); color: #fff;
+  font: inherit; font-size: 1.03rem; font-weight: 700;
+  cursor: pointer;
+}
+.btn-lg:active { filter: brightness(.93); }
+.btn-lg:disabled { opacity: .5; cursor: default; }
+.btn-lg.danger-fill { background: #b3261e; }
+
+.btn-ghost-sm {
+  padding: 9px 16px; border-radius: 999px;
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); font: inherit; font-size: .86rem; cursor: pointer;
+}
+.btn-ghost-sm.danger { color: #b3261e; border-color: #e6c4c1; }
+
+.x {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: var(--bg-soft); border: none; color: var(--text);
+  font-size: 1rem; cursor: pointer; flex: 0 0 auto;
+}
+
+/* ---------- الإعداد ---------- */
+.setup { padding-top: 34px; padding-bottom: 40px; }
+.setup-logo { width: min(230px, 62vw); height: auto; margin: 0 auto 14px; }
+.setup h1 { text-align: center; font-size: 1.35rem; margin: 0 0 4px; }
+.setup > .muted { text-align: center; margin: 0 0 6px; font-size: .9rem; }
+
+/* ---------- ترويسة اللوحة ---------- */
+.ah {
+  display: flex; align-items: center; gap: 11px;
+  padding: 14px 0 12px; border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+.ah-logo { width: 92px; height: auto; object-fit: contain; }
+.ah-t { display: flex; flex-direction: column; line-height: 1.35; min-width: 0; }
+.ah-t strong { font-size: 1rem; }
+.ah-t span { font-size: .8rem; }
+.ah-icon {
+  margin-inline-start: auto; flex: 0 0 auto;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); font-size: 1.05rem; line-height: 1; cursor: pointer;
+}
+.ah-icon + .ah-link { margin-inline-start: 0; }
+
+.ah-link {
+  margin-inline-start: auto; flex: 0 0 auto;
+  padding: 8px 14px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); text-decoration: none; font-size: .85rem; font-weight: 600;
+}
+
+.banner {
+  margin: 12px 0 0; padding: 11px 14px; border-radius: 11px;
+  background: #fff6e0; border: 1px solid #f0dcae; color: #6b5518;
+  font-size: .86rem; line-height: 1.7;
+}
+html[data-theme="dark"] .banner { background: #2a2415; border-color: #4a3f22; color: #e8d8a8; }
+
+.add-row { margin-bottom: 4px; }
+
+/* ---------- شبكة المنتجات ---------- */
+.agrid {
+  display: grid; gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  padding: 14px 0 24px;
+}
+.acard {
+  position: relative; border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--border); background: var(--bg-soft);
+  cursor: pointer; text-align: start; padding: 0; font: inherit; color: inherit;
+}
+.acard img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+.acard .nm {
+  display: block; padding: 7px 8px 8px;
+  font-size: .74rem; line-height: 1.4; color: var(--text);
+  background: var(--surface);
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  min-height: 2.9em;
+}
+.acard .tag {
+  position: absolute; inset-inline-start: 6px; top: 6px;
+  padding: 2px 7px; border-radius: 999px;
+  background: rgba(0,0,0,.6); color: #fff; font-size: .65rem; font-weight: 600;
+}
+.acard.pending { opacity: .55; }
+.acard.pending::after {
+  content: "قيد النشر"; position: absolute; inset-inline-end: 6px; top: 6px;
+  padding: 2px 7px; border-radius: 999px;
+  background: var(--accent); color: #fff; font-size: .65rem; font-weight: 700;
+}
+
+.afoot {
+  display: flex; gap: 9px; justify-content: center;
+  padding: 22px 0 10px; border-top: 1px solid var(--border);
+}
+
+/* ---------- الألواح المنبثقة ---------- */
+.sheet {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(30,20,14,.55);
+  display: flex; align-items: flex-end; justify-content: center;
+}
+@media (min-width: 620px) { .sheet { align-items: center; } }
+
+.sheet-box {
+  width: 100%; max-width: 560px; max-height: 92vh;
+  display: flex; flex-direction: column;
+  background: var(--bg);
+  border-radius: 20px 20px 0 0;
+  animation: up .22s ease;
+}
+@media (min-width: 620px) { .sheet-box { border-radius: 18px; } }
+@keyframes up { from { transform: translateY(24px); opacity: 0; } }
+
+.sheet-head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 15px 16px; border-bottom: 1px solid var(--border);
+}
+.sheet-head strong { font-size: 1rem; flex: 1; min-width: 0; }
+.sheet-body { padding: 4px 16px 16px; overflow-y: auto; }
+.sheet-foot {
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+}
+.sheet-foot.col > .btn-lg:first-child { margin-top: 0; }
+.sheet-foot > .btn-lg { margin-top: 10px; }
+.sheet-foot > .btn-lg:first-child { margin-top: 0; }
+
+.hint.nomargin { margin: 6px 0 0; }
+.opt { font-weight: 400; color: var(--text-dim); font-size: .82em; }
+
+input[type=color] {
+  width: 100%; height: 46px; margin-top: 7px; padding: 4px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 11px; cursor: pointer;
+}
+
+.wa-preview {
+  margin: 9px 0 0; padding: 9px 12px; border-radius: 10px;
+  background: #e8f7ec; border: 1px solid #bfe4c9; color: #1d5c30;
+  font-size: .82rem; line-height: 1.7;
+}
+.wa-preview.bad { background: #fdecea; border-color: #f2c0bb; color: #a1271d; }
+html[data-theme="dark"] .wa-preview { background: #17301f; border-color: #2c5138; color: #a8dcb8; }
+html[data-theme="dark"] .wa-preview.bad { background: #331916; border-color: #5c2b26; color: #e8a89f; }
+
+.is-thumb {
+  width: 100%; max-height: 220px; object-fit: contain;
+  border-radius: 12px; background: var(--bg-soft); margin-top: 14px;
+}
+
+/* ---------- قائمة المراجعة ---------- */
+.rev-list { overflow-y: auto; padding: 6px 16px 12px; }
+.rev-item {
+  display: flex; gap: 11px; align-items: flex-start;
+  padding: 13px 0; border-bottom: 1px solid var(--border);
+}
+.rev-item:last-child { border-bottom: none; }
+.rev-item img {
+  width: 62px; height: 62px; object-fit: cover;
+  border-radius: 9px; flex: 0 0 auto; background: var(--bg-soft);
+}
+.rev-f { flex: 1; min-width: 0; }
+.rev-f label { margin-top: 0; font-size: .78rem; }
+.rev-f label + label { margin-top: 8px; }
+.rev-f input, .rev-f select { padding: 9px 11px; font-size: .92rem; margin-top: 4px; }
+.rev-drop { border: none; background: none; color: #b3261e; font: inherit; font-size: .78rem; cursor: pointer; padding: 4px 0 0; }
+.rev-size { font-size: .72rem; color: var(--text-dim); }
+.rev-size.warn { color: #b3261e; font-weight: 600; }
+
+/* ---------- الانتظار ---------- */
+.busy {
+  position: fixed; inset: 0; z-index: 120;
+  background: rgba(253,246,236,.94);
+  display: grid; place-content: center; justify-items: center; gap: 16px;
+}
+html[data-theme="dark"] .busy { background: rgba(15,17,21,.94); }
+.busy p { margin: 0; font-weight: 600; color: var(--text); }
+.spinner {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid var(--border); border-top-color: var(--accent);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 2.4s; }
+  .sheet-box { animation: none; }
+}
