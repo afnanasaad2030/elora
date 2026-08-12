@@ -31,11 +31,18 @@
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g,
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+  /**
+   * يبني رابط واتساب مع اسم المنتج في سطر مستقل.
+   * السطر المستقل مقصود: يجعل النص مقروءًا مهما كتب صاحب المتجر،
+   * فلا يعود ينتهي بمسافة أو نقطتين حتى لا تلتصق الكلمات باسم المنتج.
+   */
   function waLink(itemTitle) {
     const num = String(CFG.whatsapp || '').replace(/\D/g, '');
     if (!num) return null;
-    const msg = (CFG.whatsappMessage || '') + (itemTitle || '');
-    return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+    const intro = String(CFG.whatsappMessage || '').trim();
+    const name = String(itemTitle || '').trim();
+    const msg = intro && name ? `${intro}\n\n${name}` : (intro || name);
+    return `https://wa.me/${num}${msg ? `?text=${encodeURIComponent(msg)}` : ''}`;
   }
 
   /** وسم "جديد" يُحسب وقت العرض، فيختفي وحده بعد NEW_DAYS بلا إعادة نشر. */
