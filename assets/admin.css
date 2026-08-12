@@ -37,9 +37,11 @@ select { background-image: none; }
 .btn-lg.danger-fill { background: #b3261e; }
 
 .btn-ghost-sm {
+  display: inline-block;
   padding: 9px 16px; border-radius: 999px;
   background: transparent; border: 1px solid var(--border);
   color: var(--text-dim); font: inherit; font-size: .86rem; cursor: pointer;
+  text-decoration: none;
 }
 .btn-ghost-sm.danger { color: #b3261e; border-color: #e6c4c1; }
 
