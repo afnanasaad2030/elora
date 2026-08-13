@@ -6,14 +6,14 @@
 <meta name="theme-color" content="#fbf8f6">
 <meta name="robots" content="noindex, nofollow">
 <title>لوحة تحكم ELORA</title>
-<link rel="icon" href="assets/icon.png?v=20260813093936">
-<link rel="apple-touch-icon" href="assets/icon.png?v=20260813093936">
+<link rel="icon" href="assets/icon.png?v=20260813140531">
+<link rel="apple-touch-icon" href="assets/icon.png?v=20260813140531">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20260813093936">
-<link rel="stylesheet" href="assets/admin.css?v=20260813093936">
+<link rel="stylesheet" href="assets/style.css?v=20260813140531">
+<link rel="stylesheet" href="assets/admin.css?v=20260813140531">
 </head>
 <body class="admin">
 
@@ -41,7 +41,7 @@
 <!-- ══════════ شاشة الإعداد ══════════
      تظهر افتراضيًا بلا اعتماد على الكود؛ يخفيها الكود عند وجود جلسة محفوظة. -->
 <section id="setup" class="screen setup">
-  <img src="assets/logo.png?v=20260813093936" alt="ELORA" class="setup-logo">
+  <img src="assets/logo.png?v=20260813140531" alt="ELORA" class="setup-logo">
   <h1>ربط لوحة التحكم</h1>
   <p class="muted">تُملأ مرة واحدة فقط على هذا الجهاز.</p>
 
@@ -70,7 +70,7 @@
 <section id="app" class="screen" hidden>
 
   <header class="ah">
-    <img src="assets/logo.png?v=20260813093936" alt="ELORA" class="ah-logo">
+    <img src="assets/logo.png?v=20260813140531" alt="ELORA" class="ah-logo">
     <div class="ah-t">
       <strong>لوحة التحكم</strong>
       <span id="ahCount" class="muted"></span>
@@ -169,8 +169,53 @@
         <input id="sIg" type="text" dir="ltr" placeholder="elora.store">
       </label>
 
-      <label>لون الهوية
+      <h3 class="sec">المظهر</h3>
+
+      <label>شعار المتجر</label>
+      <div class="logo-box">
+        <img id="sLogoPrev" alt="">
+        <button id="sLogoPick" type="button" class="btn-ghost-sm">تغيير الشعار</button>
+        <input id="sLogoFile" type="file" accept="image/*" hidden>
+      </div>
+      <p class="hint nomargin">
+        يُفضَّل ملف <b>PNG بخلفية شفافة</b> ليظهر على أي لون.
+        الصورة ذات الخلفية البيضاء ستظهر بمربع أبيض حولها.
+      </p>
+
+      <label>حجم الشعار
+        <select id="sLogoSize">
+          <option value="small">صغير</option>
+          <option value="medium">متوسط</option>
+          <option value="large">كبير</option>
+        </select>
+      </label>
+
+      <label>لون الهوية <span class="opt">(الأزرار والتصنيف المختار)</span>
         <input id="sAccent" type="color">
+      </label>
+
+      <label>لون الخلفية</label>
+      <div id="sBg" class="swatches">
+        <button type="button" data-bg="warm"  style="--sw:#fbf8f6">أبيض دافئ</button>
+        <button type="button" data-bg="white" style="--sw:#ffffff">أبيض نقي</button>
+        <button type="button" data-bg="blush" style="--sw:#fdf4f3">وردي فاتح</button>
+        <button type="button" data-bg="sand"  style="--sw:#faf7f0">رملي</button>
+      </div>
+
+      <label>شكل صور المنتجات
+        <select id="sRatio">
+          <option value="4/5">طولية (الأنسب للإكسسوارات)</option>
+          <option value="1/1">مربعة</option>
+          <option value="3/4">طولية قصيرة</option>
+        </select>
+      </label>
+
+      <label>الوضع الافتراضي للزائر
+        <select id="sTheme">
+          <option value="light">فاتح</option>
+          <option value="dark">داكن</option>
+          <option value="auto">حسب إعدادات جهازه</option>
+        </select>
       </label>
     </div>
     <div class="sheet-foot">
@@ -187,6 +232,6 @@
 
 <div id="toast" class="toast" hidden></div>
 
-<script src="assets/admin.js?v=20260813093936"></script>
+<script src="assets/admin.js?v=20260813140531"></script>
 </body>
 </html>

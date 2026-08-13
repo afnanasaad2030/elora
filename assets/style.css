@@ -27,6 +27,11 @@
   --r-md: 14px;
   --r-lg: 20px;
 
+  /* يتحكم بها صاحب المتجر من لوحة التحكم */
+  --logo-w:    340px;
+  --card-ratio: 4 / 5;
+  --card-pad:  125%;          /* = 5/4 — بديل card-ratio للمتصفحات القديمة */
+
   --ease: cubic-bezier(.22,.61,.36,1);
 }
 
@@ -94,7 +99,7 @@ code {
 .hero-inner { max-width: 660px; margin: 0 auto; }
 
 .logo-slot img {
-  width: min(340px, 74vw);
+  width: min(var(--logo-w), 80vw);
   height: auto;
   margin: 0 auto 20px;
 }
@@ -205,7 +210,7 @@ main {
 
 .card-media {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--card-ratio);
   border-radius: var(--r-md);
   overflow: hidden;
   background: var(--bg-soft);
@@ -223,7 +228,7 @@ main {
 /* بديل aspect-ratio للمتصفحات الأقدم (Safari دون 15).
    بدونه يصبح ارتفاع البطاقة صفرًا فتختفي كل الصور. */
 @supports not (aspect-ratio: 4 / 5) {
-  .card-media { height: 0; padding-top: 125%; }
+  .card-media { height: 0; padding-top: var(--card-pad); }
   .card-media img { position: absolute; inset: 0; }
 }
 .card:hover .card-media img { transform: scale(1.055); }

@@ -9,5 +9,8 @@
   "email": "",
   "location": "",
   "accent": "#d9b4bc",
-  "defaultTheme": "light"
+  "defaultTheme": "light",
+  "logoSize": "medium",
+  "bgTheme": "warm",
+  "cardRatio": "4/5"
 }

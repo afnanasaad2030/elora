@@ -500,6 +500,7 @@
       SITE = {};                // الملف مفقود — ستُنشئه أول عملية حفظ
     }
     applyAccent(SITE.accent);
+    markBg(SITE.bgTheme || 'warm');
   }
 
   /** يحوّل ما يكتبه المستخدم إلى رقم دولي صالح لرابط wa.me. */
@@ -531,13 +532,116 @@
 
   $('#sWa').addEventListener('input', updateWaPreview);
 
+  /* ---------- المظهر ---------- */
+  const BG_THEMES = {
+    warm:  { bg: '#fbf8f6', soft: '#f4ebe7', border: '#ece0db', line: '#f2e8e4' },
+    white: { bg: '#ffffff', soft: '#f5f5f6', border: '#e8e8ea', line: '#f0f0f2' },
+    blush: { bg: '#fdf4f3', soft: '#f8e8e6', border: '#f0dcd9', line: '#f7e6e3' },
+    sand:  { bg: '#faf7f0', soft: '#f2ece0', border: '#e9e0cf', line: '#f2ebdd' },
+  };
+
+  let bgChoice = 'warm';
+  let stagedLogo = null;           // {logo: Blob, icon: Blob, url: string}
+
+  /** معاينة فورية للخلفية داخل اللوحة نفسها. */
+  function applyBg(key) {
+    const t = BG_THEMES[key];
+    if (!t || document.documentElement.dataset.theme === 'dark') return;
+    const s = document.documentElement.style;
+    s.setProperty('--bg', t.bg);
+    s.setProperty('--bg-soft', t.soft);
+    s.setProperty('--border', t.border);
+    s.setProperty('--line', t.line);
+  }
+
+  function markBg(key) {
+    bgChoice = BG_THEMES[key] ? key : 'warm';
+    $('#sBg').querySelectorAll('button').forEach((b) =>
+      b.setAttribute('aria-pressed', String(b.dataset.bg === bgChoice)));
+    applyBg(bgChoice);
+  }
+
+  $('#sBg').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-bg]');
+    if (b) markBg(b.dataset.bg);
+  });
+
+  $('#sAccent').addEventListener('input', (e) => applyAccent(e.target.value));
+
+  /** يقرأ أي صورة، حتى لو تعذّرت createImageBitmap على متصفح أقدم. */
+  async function loadImage(file) {
+    try {
+      return await createImageBitmap(file);
+    } catch {
+      const url = URL.createObjectURL(file);
+      try {
+        const img = new Image();
+        img.src = url;
+        await img.decode();
+        return img;
+      } finally { setTimeout(() => URL.revokeObjectURL(url), 5000); }
+    }
+  }
+
+  /** يجهّز الشعار: PNG يحفظ الشفافية + أيقونة مربّعة للشاشة الرئيسية. */
+  async function prepLogo(file) {
+    const img = await loadImage(file);
+    const w = img.width || img.naturalWidth;
+    const h = img.height || img.naturalHeight;
+    if (!w || !h) throw new Error('تعذّر قراءة الصورة');
+
+    const k = Math.min(1, 1600 / w);
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(w * k));
+    c.height = Math.max(1, Math.round(h * k));
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    // PNG وليس JPEG: الأخير يفقد الشفافية فيظهر مربع أبيض خلف الشعار
+    const logo = await new Promise((r) => c.toBlob(r, 'image/png'));
+
+    const S = 512;
+    const ic = document.createElement('canvas');
+    ic.width = ic.height = S;
+    const x = ic.getContext('2d');
+    x.fillStyle = $('#sAccent').value || '#ba8490';
+    x.fillRect(0, 0, S, S);
+    const f = Math.min((S * 0.8) / w, (S * 0.8) / h);
+    x.drawImage(img, (S - w * f) / 2, (S - h * f) / 2, w * f, h * f);
+    const icon = await new Promise((r) => ic.toBlob(r, 'image/png'));
+
+    img.close?.();
+    return { logo, icon, url: URL.createObjectURL(logo) };
+  }
+
+  $('#sLogoPick').addEventListener('click', () => $('#sLogoFile').click());
+
+  $('#sLogoFile').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      busy('جارٍ تجهيز الشعار…');
+      if (stagedLogo) URL.revokeObjectURL(stagedLogo.url);
+      stagedLogo = await prepLogo(file);
+      $('#sLogoPrev').src = stagedLogo.url;
+      toast('سيُحفظ الشعار عند الضغط على «حفظ الإعدادات»');
+    } catch (err) {
+      alert('تعذّر قراءة الصورة: ' + err.message);
+    } finally { idle(); }
+  });
+
   $('#btnSettings').addEventListener('click', () => {
-    $('#sBrand').value   = SITE.brandName || '';
-    $('#sTagline').value = SITE.tagline || '';
-    $('#sWa').value      = SITE.whatsapp || '';
-    $('#sWaMsg').value   = SITE.whatsappMessage || '';
-    $('#sIg').value      = SITE.instagram || '';
-    $('#sAccent').value  = /^#[0-9a-f]{6}$/i.test(SITE.accent || '') ? SITE.accent : '#c9963f';
+    $('#sBrand').value    = SITE.brandName || '';
+    $('#sTagline').value  = SITE.tagline || '';
+    $('#sWa').value       = SITE.whatsapp || '';
+    $('#sWaMsg').value    = SITE.whatsappMessage || '';
+    $('#sIg').value       = SITE.instagram || '';
+    $('#sAccent').value   = /^#[0-9a-f]{6}$/i.test(SITE.accent || '') ? SITE.accent : '#ba8490';
+    $('#sLogoSize').value = SITE.logoSize || 'medium';
+    $('#sRatio').value    = SITE.cardRatio || '4/5';
+    $('#sTheme').value    = SITE.defaultTheme || 'light';
+    $('#sLogoPrev').src   = stagedLogo ? stagedLogo.url
+      : rawURL(SITE.logo || 'assets/logo.png') + '?t=' + Date.now();
+    markBg(SITE.bgTheme || 'warm');
     updateWaPreview();
     $('#settings').hidden = false;
   });
@@ -555,21 +659,39 @@
       ...SITE,
       brandName:       $('#sBrand').value.trim() || 'ELORA',
       tagline:         $('#sTagline').value.trim(),
-      logo:            SITE.logo ?? 'assets/logo.png',
+      logo:            'assets/logo.png',
       whatsapp:        wa,
       whatsappMessage: $('#sWaMsg').value,
       instagram:       $('#sIg').value.trim().replace(/^@/, ''),
       accent:          $('#sAccent').value,
-      defaultTheme:    SITE.defaultTheme ?? 'light',
+      logoSize:        $('#sLogoSize').value,
+      bgTheme:         bgChoice,
+      cardRatio:       $('#sRatio').value,
+      defaultTheme:    $('#sTheme').value,
     };
     delete next._sha;
+
+    const entries = [{
+      path: CFG_PATH,
+      blob: new Blob([JSON.stringify(next, null, 2) + '\n'], { type: 'application/json' }),
+    }];
+    if (stagedLogo) {
+      entries.push({ path: 'assets/logo.png', blob: stagedLogo.logo });
+      entries.push({ path: 'assets/icon.png', blob: stagedLogo.icon });
+    }
 
     closeSettings();
     try {
       busy('جارٍ الحفظ…');
-      const blob = new Blob([JSON.stringify(next, null, 2) + '\n'], { type: 'application/json' });
-      await commit([{ path: CFG_PATH, blob }], 'تحديث إعدادات المتجر');
+      await commit(entries, 'تحديث إعدادات المتجر');
       SITE = next;
+      if (stagedLogo) {
+        URL.revokeObjectURL(stagedLogo.url);
+        stagedLogo = null;
+        document.querySelectorAll('.ah-logo, .setup-logo').forEach((el) => {
+          el.src = rawURL('assets/logo.png') + '?t=' + Date.now();
+        });
+      }
       applyAccent(next.accent);         // معاينة فورية للون الجديد
       await loadSite();                 // لالتقاط بصمة الملف الجديدة
       showBanner();

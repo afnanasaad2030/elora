@@ -169,6 +169,43 @@ html[data-theme="dark"] .banner { background: #2a2415; border-color: #4a3f22; co
 .sheet-foot > .btn-lg:first-child { margin-top: 0; }
 
 .hint.nomargin { margin: 6px 0 0; }
+
+/* ---------- قسم المظهر ---------- */
+h3.sec {
+  margin: 26px 0 2px; padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: .95rem; font-weight: 600; color: var(--text);
+}
+
+.logo-box {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 9px; padding: 14px;
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.logo-box img {
+  flex: 1; min-width: 0; max-height: 62px;
+  object-fit: contain; object-position: right center;
+}
+.logo-box img:not([src]) { display: none; }
+.logo-box .btn-ghost-sm { flex: 0 0 auto; background: var(--surface); }
+
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 9px; }
+.swatches button {
+  flex: 1 1 auto; min-width: 118px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px; border-radius: 11px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); font: inherit; font-size: .84rem; cursor: pointer;
+}
+.swatches button::before {
+  content: ''; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--sw); border: 1px solid var(--border); flex: 0 0 auto;
+}
+.swatches button[aria-pressed="true"] {
+  border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent);
+  font-weight: 600;
+}
 .opt { font-weight: 400; color: var(--text-dim); font-size: .82em; }
 
 input[type=color] {

@@ -13,10 +13,45 @@
   let shown = 0;                   // كم عنصرًا عُرض من view
   let lbIndex = -1;
 
+  /* ---------- خيارات المظهر التي يضبطها صاحب المتجر ---------- */
+  // تُطبَّق على الوضع الفاتح فقط؛ الوضع الداكن له لوحته الخاصة.
+  const BG_THEMES = {
+    warm:  { bg: '#fbf8f6', soft: '#f4ebe7', border: '#ece0db', line: '#f2e8e4' },
+    white: { bg: '#ffffff', soft: '#f5f5f6', border: '#e8e8ea', line: '#f0f0f2' },
+    blush: { bg: '#fdf4f3', soft: '#f8e8e6', border: '#f0dcd9', line: '#f7e6e3' },
+    sand:  { bg: '#faf7f0', soft: '#f2ece0', border: '#e9e0cf', line: '#f2ebdd' },
+  };
+  const LOGO_W  = { small: '230px', medium: '340px', large: '460px' };
+  const RATIOS  = { '1/1': '100%', '4/5': '125%', '3/4': '133.33%' };
+
+  function applyLook(cfg) {
+    const s = document.documentElement.style;
+
+    s.setProperty('--logo-w', LOGO_W[cfg.logoSize] || LOGO_W.medium);
+
+    const ratio = RATIOS[cfg.cardRatio] ? cfg.cardRatio : '4/5';
+    s.setProperty('--card-ratio', ratio.replace('/', ' / '));
+    s.setProperty('--card-pad', RATIOS[ratio]);
+
+    const bg = BG_THEMES[cfg.bgTheme];
+    if (bg && document.documentElement.dataset.theme !== 'dark') {
+      s.setProperty('--bg', bg.bg);
+      s.setProperty('--bg-soft', bg.soft);
+      s.setProperty('--border', bg.border);
+      s.setProperty('--line', bg.line);
+      const meta = document.querySelector('meta[name=theme-color]');
+      if (meta) meta.setAttribute('content', bg.bg);
+    }
+  }
+
   /* ---------- الوضع الليلي ---------- */
   function initTheme(pref) {
     const saved = localStorage.getItem('theme');
-    const mode = saved || pref || 'dark';
+    let mode = saved || pref || 'light';
+    if (mode === 'auto') {
+      mode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark' : 'light';
+    }
     document.documentElement.dataset.theme = mode;
     document.querySelector('meta[name=theme-color]')
       ?.setAttribute('content', mode === 'dark' ? '#141110' : '#fbf8f6');
@@ -24,7 +59,11 @@
   $('#themeBtn').addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     localStorage.setItem('theme', next);
+    // امسح ألوان الخلفية المخصّصة قبل التبديل حتى لا تتسرّب إلى الوضع الداكن
+    ['--bg', '--bg-soft', '--border', '--line']
+      .forEach((p) => document.documentElement.style.removeProperty(p));
     initTheme(next);
+    applyLook(CFG);
   });
 
   /* ---------- أدوات ---------- */
@@ -270,6 +309,7 @@
     CFG = cfg;
     ASSET_V = data.version || '';
     initTheme(CFG.defaultTheme);
+    applyLook(CFG);
     renderHeader();
 
     ALL = Array.isArray(data) ? data : (data.items || []);
