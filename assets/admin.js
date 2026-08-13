@@ -318,7 +318,8 @@
     $('#revList').innerHTML = queue.map((q, i) => {
       const mb = (q.full.size / 1048576).toFixed(1);
       const warn = q.full.size > VIDEO_MAX_MB * 1048576;
-      // ملاحظة: بلا ||= — تلك الصيغة من 2021 وترفضها المتصفحات الأقدم فيتعطّل الملف كله
+      // إسناد صريح عمدًا: صيغ الإسناد المنطقي (2021) ترفضها المتصفحات الأقدم
+      // فيسقط الملف كله عند القراءة وتظهر الصفحة بيضاء.
       if (!q.preview) q.preview = URL.createObjectURL(q.thumb || q.full);
       return `<div class="rev-item" data-i="${i}">
         <img src="${q.preview}" alt="">
