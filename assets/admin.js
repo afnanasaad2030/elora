@@ -318,7 +318,8 @@
     $('#revList').innerHTML = queue.map((q, i) => {
       const mb = (q.full.size / 1048576).toFixed(1);
       const warn = q.full.size > VIDEO_MAX_MB * 1048576;
-      q.preview ||= URL.createObjectURL(q.thumb || q.full);   // مرة واحدة لكل ملف
+      // ملاحظة: بلا ||= — تلك الصيغة من 2021 وترفضها المتصفحات الأقدم فيتعطّل الملف كله
+      if (!q.preview) q.preview = URL.createObjectURL(q.thumb || q.full);
       return `<div class="rev-item" data-i="${i}">
         <img src="${q.preview}" alt="">
         <div class="rev-f">
@@ -650,7 +651,7 @@
     document.documentElement.dataset.theme = localStorage.getItem('theme') || 'light';
     try { CFG = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch { CFG = null; }
 
-    if (!CFG?.token) { $('#setup').hidden = false; return; }
+    if (!CFG || !CFG.token) return;              // شاشة الإعداد ظاهرة أصلًا
     try {
       await start();
     } catch (e) {

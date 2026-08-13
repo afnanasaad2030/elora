@@ -13,16 +13,23 @@
 <meta property="og:description" content="تصفّح تشكيلة ELORA واطلب مباشرة عبر واتساب.">
 <meta property="og:image" content="assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="assets/icon.png?v=20260812154054">
-<link rel="apple-touch-icon" href="assets/icon.png?v=20260812154054">
+<link rel="icon" href="assets/icon.png?v=20260813093849">
+<link rel="apple-touch-icon" href="assets/icon.png?v=20260813093849">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="assets/style.css?v=20260812154054">
+<link rel="stylesheet" href="assets/style.css?v=20260813093849">
 </head>
 <body>
+<script>
+  // يُلتقط قبل تحميل app.js ليشمل أخطاء قراءة الملف نفسها (متصفح قديم)
+  window.addEventListener('error', function () {
+    var el = document.getElementById('loadErr');
+    if (el) el.hidden = false;
+  }, true);
+</script>
 
 <header class="hero">
   <button id="themeBtn" class="icon-btn theme-btn" title="تبديل الوضع" aria-label="تبديل الوضع الليلي">
@@ -42,6 +49,16 @@
 <nav id="filters" class="filters" aria-label="تصنيفات"></nav>
 
 <main>
+  <noscript>
+    <p class="empty">
+      لعرض المنتجات، فعّل JavaScript من إعدادات المتصفح.<br>
+      <span>أو تواصل معنا مباشرة عبر واتساب.</span>
+    </p>
+  </noscript>
+  <p id="loadErr" class="empty" hidden>
+    تعذّر عرض المنتجات على هذا المتصفح.<br>
+    <span>جرّب فتح الرابط من Google Chrome، أو حدّث متصفحك.</span>
+  </p>
   <div id="grid" class="grid" aria-live="polite"></div>
   <p id="emptyState" class="empty" hidden>
     لا توجد منتجات بعد.<br>
@@ -90,6 +107,6 @@
 
 <div id="toast" class="toast" hidden></div>
 
-<script src="assets/app.js?v=20260812154054"></script>
+<script src="assets/app.js?v=20260813093849"></script>
 </body>
 </html>
